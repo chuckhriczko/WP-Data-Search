@@ -1,0 +1,14 @@
+{
+    "name": "chucksplayground/wp-data-search",
+    "description": "Wordpress plugin to store data with tags and search through them",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=7.4"
+    },
+    "authors": [
+        {
+            "name": "Chuck Hriczko",
+            "email": "chuckhriczko@gmail.com"
+        }
+    ]
+}
