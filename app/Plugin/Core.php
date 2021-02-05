@@ -34,6 +34,7 @@ class Core {
         $cptWPDS->set_singular_name('Writing');
         $cptWPDS->set_plural_name('Writings');
         $cptWPDS->set_menu_name('Writings');
+        $cptWPDS->set_labels('Add New', 'Add New Writing', 'Edit Writing', 'New Writing', 'All Writings', 'View Writing', 'Search Writings', 'No writings found', 'No writings found in the trash');
         $cptWPDS->set_menu_icon('dashicons-database');
         $cptWPDS->set_slug('wpds');
         $cptWPDS->set_description('Writings from the universe');

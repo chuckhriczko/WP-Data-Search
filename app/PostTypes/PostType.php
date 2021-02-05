@@ -77,17 +77,17 @@ class PostType implements \WPDataSearch\PostTypes\PostTypeInterface {
     public function get_post_type_name(): string { return self::$postTypeName; }
     public function set_singular_name(string $singular_name = ''){
         self::$opts['singular_name'] = $singular_name;
-        self::$opts['labels'][0]['singular_name'] = $singular_name;
+        self::$opts['labels']['singular_name'] = $singular_name;
     }
     public function get_singular_name(): string{ return self::$opts['$singular_name']; }
     public function set_plural_name(string $plural_name = ''){
         self::$opts['name'] = $plural_name;
-        self::$opts['labels'][0]['name'] = $plural_name;
+        self::$opts['labels']['name'] = $plural_name;
     }
     public function get_plural_name(): string{ return self::$opts['plural_name']; }
     public function get_menu_name(): string{ return self::$opts['$singular_name']; }
     public function set_menu_name(string $menu_name = ''){
-        self::$opts['labels'][0]['menu_name'] = $menu_name;
+        self::$opts['labels']['menu_name'] = $menu_name;
     }
     public function set_slug(string $slug = ''){ self::$opts['slug'] = $slug; }
     public function get_slug(): string{ return self::$opts['slug']; }
@@ -99,7 +99,18 @@ class PostType implements \WPDataSearch\PostTypes\PostTypeInterface {
     public function get_menu_icon(): string{ return self::$opts['menu_icon']; }
     public function set_menu_position(int $menu_position = null){ self::$opts['menu_position'] = $menu_position; }
     public function get_menu_position(): int{ return self::$opts['menu_position']; }
-    public function set_labels(array $labels = []){ self::$opts['labels'] = $labels; }
+    public function set_labels(string $lblAddNew = '', string $lblAddNewItem = '', string $lblEditItem = '', string $lblNewItem = '', string $lblAllItems = '', string $lblViewItems = '', string $lblSearchItems = '', string $lblNotFound = '', string $lblNotFoundInTrash = ''){
+        if (!empty($lblAddNew)) self::$opts['labels']['add_new'] = $lblAddNew;
+        if (!empty($lblAddNewItem)) self::$opts['labels']['add_new_item'] = $lblAddNewItem;
+        if (!empty($lblEditItem)) self::$opts['labels']['edit_item'] = $lblEditItem;
+        if (!empty($lblNewItem)) self::$opts['labels']['new_item'] = $lblNewItem;
+        if (!empty($lblAllItems)) self::$opts['labels']['all_items'] = $lblAllItems;
+        if (!empty($lblViewItems)) self::$opts['labels']['view_items'] = $lblViewItems;
+        if (!empty($lblSearchItems)) self::$opts['labels']['search_items'] = $lblSearchItems;
+        if (!empty($lblNotFound)) self::$opts['labels']['not_found'] = $lblNotFound;
+        if (!empty($lblNotFoundInTrash)) self::$opts['labels']['not_found_in_trash'] = $lblNotFoundInTrash;
+        
+    }
     public function get_labels(): array{ return self::$opts['labels']; }
     public function set_taxonomies(array $taxonomies = []){ self::$opts['taxonomies'] = $taxonomies; }
     public function get_taxonomies(): array{ return self::$opts['taxonomies']; }

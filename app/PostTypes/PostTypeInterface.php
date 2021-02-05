@@ -22,7 +22,7 @@ interface PostTypeInterface {
     public function get_menu_icon() : string;
     public function set_menu_position(int $menu_position);
     public function get_menu_position() : int;
-    public function set_labels(array $labels);
+    public function set_labels(string $lblAddNew, string $lblAddNewItem, string $lblEditItem, string $lblNewItem, string $lblAllItems, string $lblViewItems, string $lblSearchItems, string $lblNotFound, string $lblNotFoundInTrash);
     public function get_labels() : array;
     public function set_taxonomies(array $taxonomies);
     public function get_taxonomies() : array;
