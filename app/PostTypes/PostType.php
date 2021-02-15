@@ -16,14 +16,15 @@ class PostType implements PostTypeInterface {
         'menu_icon'     => '', //Icon for the post type menu item
         'menu_position' => null, //Menu position for the menu item
         'labels'        => [
-            'name' =>       '',
+            'name'          => '',
             'singular_name' => '',
             'menu_name'     => ''
         ], //Labels for the post type
         'taxonomies'    => [], //Taxonomies for the post type
         'hierarchical'  => true, //Whether the menu shows hierarchically
         'public'        => true, //Whether or not the post type shows publically
-        'show_in_menu'  => true //Whether or not the post type shows in the menu
+        'show_in_menu'  => true, //Whether or not the post type shows in the menu
+        'supports'      => ['title', 'editor'] //Determines which fields are available in post edit screen
     ];
     
     /**********************************************************************************
@@ -116,4 +117,17 @@ class PostType implements PostTypeInterface {
     public function getPublic(): bool{ return self::$opts['public']; }
     public function setShowInMenu(bool $isShowInMenu = true){ self::$opts['show_in_menu'] = $isShowInMenu; }
     public function getShowInMenu(): bool{ return self::$opts['show_in_menu']; }
+    public function addSupports(array $supports = []){ self::$opts['supports'] = array_merge(self::$opts['supports'], $supports); }
+    public function removeSupports(array $supports = []){
+        //Loop through supports
+        foreach($supports as $key=>$support){
+            //Search through array
+            $index = array_search($support, self::$opts['supports']);
+            
+            //If found, remove the support
+            if (is_numeric($index)) unset(self::$opts['supports'][$index]);
+        }
+        
+    }
+    public function getSupports(): array{ return self::$opts['supports']; }
 }

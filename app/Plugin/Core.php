@@ -92,6 +92,7 @@ class Core {
         self::$cptWPDS->setShowInMenu(true);
         self::$cptWPDS->setPublic(true);
         self::$cptWPDS->setTaxonomies([self::$WPDS_POST_TYPE]);
+        self::$cptWPDS->removeSupports(['title']);
         
         //Register custom post type
         self::$cptWPDS->register();
