@@ -112,5 +112,8 @@ class Core {
       
       //Add our content column content
       self::$cptWPDSCols->addColumnPostContent('content');
+      
+      //Reposition column
+      self::$cptWPDSCols->reorderColumn('content', 1);
     }
 }

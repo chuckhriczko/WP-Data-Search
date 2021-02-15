@@ -127,4 +127,53 @@ class Columns {
             return $columns;
         });
     }
+    
+    /**********************************************************************************
+     * Reorders a column
+     * ********************************************************************************/
+    public static function reorderColumn(string $assocIndex = '', int $pos = null) {
+        //Add the filter for adding and removing columns
+        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $pos){
+            if (!empty($assocIndex)){
+                //Instantiate our temporary columns array
+                $newCols = [];
+                
+                //Instantiate our current column counter
+                $colCurrent = 0;
+                
+                //Get the label of the column we want to reposition
+                $colLabel= $columns[$assocIndex];
+                
+                //Get the number of columns that have been passed
+                $colsCount = count($columns);
+                
+                //If our position is null, append to the end of the array
+                $pos = (is_null($pos) || $pos>$colsCount) ? $colsCount : $pos;
+                
+                //Loop through columns
+                foreach($columns as $key=>$col){
+                    //If this is the specified position, add the new column
+                    if ($colCurrent==$pos){
+                        //Add the new item to the columns array
+                        $newCols[$assocIndex] = $colLabel;
+                        
+                        //Increment our counter so we can continue adding items
+                        $colCurrent++;
+                    }
+                    
+                    //Regardless of the specified position, add the current element
+                    $newCols[$key] = $col;
+                    
+                    //Increment our counter variable
+                    $colCurrent++;
+                }
+                
+                //Now that we have sorted the $newCols array, set it to be the contents of the $columns array
+                $columns = $newCols;
+            }
+            
+            //Return the passed columns if our columns are empty
+            return $columns;
+        });
+    }
 }
