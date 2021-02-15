@@ -50,7 +50,7 @@ class Core {
         self::initCustomPostType();
         
         //Manage our columns for our admin page
-        //self::initColumns();
+        self::initColumns();
     }
     
     /**********************************************************************************
@@ -105,12 +105,9 @@ class Core {
       self::$cptWPDSCols = new Columns(self::$WPDS_POST_TYPE);
       
       //Remove our title
-      self::$cptWPDSCols->removeCol('title');
+      self::$cptWPDSCols->removeColumn('title');
       
       //Add our content column
-      self::$cptWPDSCols->addCol('content', 'Content');
-      
-      //Initialize our columns
-      self::$cptWPDSCols->applyCols();
+      self::$cptWPDSCols->addColumn('content', 'Content', 2);
     }
 }

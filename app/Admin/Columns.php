@@ -2,12 +2,10 @@
 //Namespace our code for our application
 namespace WPDataSearch\Admin;
 
-
 //Instantiate our class
 class Columns {
     //Instantiate our class variables
     private static string $postTypeName = ''; //Post type for the columns we are modifying
-    private static array $cols = []; //Array of all of our columns
     
     /**********************************************************************************
      * Constructor, calls the init function
@@ -23,81 +21,79 @@ class Columns {
     public static function init(string $postTypeName = ''){
         //Set our post type
         self::$postTypeName = $postTypeName;
-        
-        //Perform first run initialization our columns
-        self::initCols();
-    }
-    
-    /**********************************************************************************
-     * Sets our columns
-     * ********************************************************************************/
-    public static function setCols(array $cols = []){
-        //Set all of our columns
-        self::$cols = $cols;
-    }
-    
-    /**********************************************************************************
-     * Gets our columns
-     * ********************************************************************************/
-    public static function getCols(): array {
-        //Return our columns array
-        return self::$cols;
-    }
-    
-    /**********************************************************************************
-     * Gets a single column
-     * ********************************************************************************/
-    public static function getCol(string $assocIndex = ''): array {
-        //Return our column, if it exists
-        return isset(self::$cols[$assocIndex]) ? self::$cols[$assocIndex] : [];
     }
     
     /**********************************************************************************
      * Adds a column
      * ********************************************************************************/
-    public static function addCol(string $assocIndex = '', string $assocContent = '') {
-        //Add column to columns array if it does not already exist
-        if (!empty($assocIndex) && !isset(self::$cols[$assocIndex])) self::$cols[$assocIndex] = $assocContent;
+    public static function addColumn(string $assocIndex = '', string $assocLabel = '', $pos = null) {
+        //Add the filter for adding and removing columns
+        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel, $pos){
+            if (!empty($assocIndex) && !isset($columns[$assocIndex])){
+                //Instantiate our temporary columns array
+                $newCols = [];
+                
+                //Instantiate our current column counter
+                $colCurrent = 0;
+                
+                //Get the number of columns that have been passed
+                $colsCount = count($columns);
+                
+                //If our position is null, append to the end of the array
+                $pos = (is_null($pos) || $pos>$colsCount) ? $colsCount : $pos;
+                
+                //Loop through columns
+                foreach($columns as $key=>$col){
+                    //If this is the specified position, add the new column
+                    if ($colCurrent==$pos){
+                        //Add the new item to the columns array
+                        $newCols[$assocIndex] = $assocLabel;
+                        
+                        //Increment our counter so we can continue adding items
+                        $colCurrent++;
+                    }
+                    
+                    //Regardless of the specified position, add the current element
+                    $newCols[$key] = $col;
+                    
+                    //Increment our counter variable
+                    $colCurrent++;
+                }
+                
+                //Now that we have sorted the $newCols array, set it to be the contents of the $columns array
+                $columns = $newCols;
+            }
+            
+            //Return the passed columns if our columns are empty
+            return $columns;
+        });
     }
     
     /**********************************************************************************
      * Removes a column
      * ********************************************************************************/
-    public static function removeCol(string $assocIndex = '') {
-        //If the associative index exists, remove it
-        if (!empty($assocIndex) && isset(self::$cols[$assocIndex])) unset(self::$cols[$assocIndex]);
+    public static function removeColumn(string $assocIndex = '') {
+        //Add the filter for adding and removing columns
+        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex){
+            //Remove the column if it exists
+            if (!empty($assocIndex) && isset($columns[$assocIndex])) unset($columns[$assocIndex]);
+            
+            //Return the passed columns if our columns are empty
+            return $columns;
+        });
     }
     
     /**********************************************************************************
      * Updates a column
      * ********************************************************************************/
-    public static function updateCol(string $assocIndex = '', string $assocContent = '') {
-        //If the column exists, update the assocContent
-        if (!empty($assocIndex) && isset(self::$cols[$assocIndex])) self::$cols[$assocIndex] = $assocContent;
-    }
-    
-    /**********************************************************************************
-     * Initializes our columns management filter
-     * ********************************************************************************/
-    public static function initCols() {
+    public static function updateColumn(string $assocIndex = '', string $assocLabel = '') {
         //Add the filter for adding and removing columns
-        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns){
-            //If our class columns variable is empty, this is our first run so we
-            //must set our columns variable
-            //self::$cols = empty(self::$cols) ? $columns : self::$cols;
-error_log(print_r(self::$cols,true));
+        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel){
+            //If the column exists, update the column label
+            $columns[$assocIndex] = (!empty($assocIndex) && isset($columns[$assocIndex])) ? $assocLabel : $columns[$assocIndex];
+            
             //Return the passed columns if our columns are empty
-            return self::$cols;
+            return $columns;
         });
-        apply_filters('manage_'.self::$postTypeName.'_posts_columns', '');
-    }
-    
-    /**********************************************************************************
-     * Applies our column filters
-     * ********************************************************************************/
-    public static function applyCols() {
-        error_log(print_r(self::$cols,true));
-        //Apply our column filters
-        apply_filters('manage_'.self::$postTypeName.'_posts_columns', '');
     }
 }
