@@ -1,11 +1,11 @@
 <?php
 //Namespace our code for our application
-namespace WPDataSearch\PostTypes;
+namespace WPDataSearch\Taxonomies;
 
 //Instantiate our class
-interface PostTypeInterface {
-    public function setPostTypeName(string $postTypeName);
-    public function getPostTypeName() : string;
+interface TaxonomyInterface {
+    public function setTaxonomyName(string $taxonomyName);
+    public function getTaxonomyName() : string;
     public function setSingularName(string $singular_name);
     public function getSingularName() : string;
     public function setPluralName(string $plural_name);
@@ -16,20 +16,14 @@ interface PostTypeInterface {
     public function getSlug() : string;
     public function setDescription(string $description);
     public function getDescription() : string;
-    public function setFilters(string $filters);
-    public function getFilters() : string;
-    public function setMenuIcon(string $menu_icon);
-    public function getMenuIcon() : string;
-    public function setMenuPosition(int $menu_position);
-    public function getMenuPosition() : int;
-    public function setLabels(string $lblAddNew, string $lblAddNewItem, string $lblEditItem, string $lblNewItem, string $lblAllItems, string $lblViewItems, string $lblSearchItems, string $lblNotFound, string $lblNotFoundInTrash);
+    public function setLabels(string $lblSearchItems, string $lblPopularItems, string $lblAllItems, string $lblEditItem, string $lblUpdateItem, string $lblAddNewItem, string $lblNewItemName, string $lblMenuName);
     public function getLabels() : array;
-    public function setTaxonomies(array $taxonomies);
-    public function getTaxonomies() : array;
     public function setHierarchical(bool $isHierarchical);
     public function getHierarchical() : bool;
     public function setPublic(bool $isPublic);
     public function getPublic() : bool;
     public function setShowInMenu(bool $isShowInMenu);
     public function getShowInMenu() : bool;
+    public function setTaxonomies(array $taxonomies = array());
+    public function getTaxonomies() : array;
 }
