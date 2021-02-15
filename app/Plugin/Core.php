@@ -114,6 +114,9 @@ class Core {
       //Add our content column content
       self::$cptWPDSCols->addColumnPostContent('content');
       
+      //Add our content column content
+      self::$cptWPDSCols->addColumnOptionData('content', 'site_url');
+      
       //Reposition column
       self::$cptWPDSCols->reorderColumn('content', 1);
     }

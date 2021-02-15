@@ -92,6 +92,36 @@ class Columns {
     }
     
     /**********************************************************************************
+     * Adds action to add post meta data to columns
+     * ********************************************************************************/
+    public static function addColumnPostMeta(string $assocIndex = '', string $metaKey = '') {
+        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $metaKey) {
+            if ($columnKey==$assocIndex){
+                //Get the metadata from the post based on the meta_key field
+                $meta = get_post_meta($postId, $metaKey, true);
+                
+                //Echo the metadata
+                echo $meta;
+            }
+        }, 10, 2);
+    }
+    
+    /**********************************************************************************
+     * Adds action to add option meta data to columns
+     * ********************************************************************************/
+    public static function addColumnOptionData(string $assocIndex = '', string $optionKey = '', string $defaultData = '') {
+        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $optionKey, $defaultData) {
+            if ($columnKey==$assocIndex){
+                //Get the metadata from the post based on the meta_key field
+                $option = get_option($optionKey, $defaultData);
+                
+                //Echo the metadata
+                echo $option;
+            }
+        }, 10, 2);
+    }
+    
+    /**********************************************************************************
      * Adds action to add custom content to columns
      * ********************************************************************************/
     public static function addColumnCustomContent(string $assocIndex = '', string $content = '') {
