@@ -6,6 +6,7 @@ namespace WPDataSearch\Admin;
 class Columns {
     //Instantiate our class variables
     private static string $postTypeName = ''; //Post type for the columns we are modifying
+    private static int $contentLength = 100; //The maximum length of content to be displayed
     
     /**********************************************************************************
      * Constructor, calls the init function
@@ -26,7 +27,7 @@ class Columns {
     /**********************************************************************************
      * Adds a column
      * ********************************************************************************/
-    public static function addColumn(string $assocIndex = '', string $assocLabel = '', $pos = null) {
+    public static function addColumn(string $assocIndex = '', string $assocLabel = '', int $pos = null) {
         //Add the filter for adding and removing columns
         add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel, $pos){
             if (!empty($assocIndex) && !isset($columns[$assocIndex])){
@@ -67,6 +68,36 @@ class Columns {
             //Return the passed columns if our columns are empty
             return $columns;
         });
+    }
+    
+    /**********************************************************************************
+     * Adds action to add post content to columns
+     * ********************************************************************************/
+    public static function addColumnPostContent(string $assocIndex = '') {
+        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex) {
+            if ($columnKey==$assocIndex){
+                //Get the current post object
+                $post = get_post($postId);
+                
+                //Get the content
+                $content = $post->post_content;
+                
+                //Cut the content
+                substr($content, 0, self::$contentLength);
+                
+                //Display the content
+                echo apply_filters('the_content', $content);
+            }
+        }, 10, 2);
+    }
+    
+    /**********************************************************************************
+     * Adds action to add custom content to columns
+     * ********************************************************************************/
+    public static function addColumnCustomContent(string $assocIndex = '', string $content = '') {
+        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $content) {
+            echo $columnKey==$assocIndex ? $content : '';
+        }, 10, 2);
     }
     
     /**********************************************************************************

@@ -109,5 +109,8 @@ class Core {
       
       //Add our content column
       self::$cptWPDSCols->addColumn('content', 'Content', 2);
+      
+      //Add our content column content
+      self::$cptWPDSCols->addColumnPostContent('content');
     }
 }
