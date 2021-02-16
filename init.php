@@ -14,8 +14,5 @@ License: GPLv2
 //Include our autoload file
 require 'vendor/autoload.php';
 
-//Import our core namespace
-use \WPDataSearch\Plugin\Core;
-
-///Initialize our plugin
-Core::init();
+//Initialize our plugin
+$wpdsCore = new \WPDataSearch\Plugin\Core();

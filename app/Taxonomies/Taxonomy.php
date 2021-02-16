@@ -9,9 +9,9 @@ class Taxonomy implements TaxonomyInterface {
     //const 
     
     //Init our class variables
-    private static string $taxonomyName = ''; //Name for the taxonomy
-    private static string $postType = ''; //Post type to which to add the taxonomy to
-    private static array $opts = [
+    private string $taxonomyName = ''; //Name for the taxonomy
+    private string $postType = ''; //Post type to which to add the taxonomy to
+    private array $opts = [
         'name'          => '', //Plural name for the taxonomy
         'slug'          => '', //Slug for the taxonomy
         'singular_name' => '', //Singular name for the taxonomy
@@ -38,13 +38,13 @@ class Taxonomy implements TaxonomyInterface {
      * ********************************************************************************/
     public function __construct(string $taxonomyName = '', string $postType = '', array $opts = []){
         //Call our plugin initialization function
-        self::init($taxonomyName, $postType, $opts);
+        $this->init($taxonomyName, $postType, $opts);
     }
     
     /**********************************************************************************
      * Initializes our custom taxonomy
      * ********************************************************************************/
-    public static function init(string $taxonomyName = '', $postType = '', array $opts = []){
+    public function init(string $taxonomyName = '', $postType = '', array $opts = []){
         //Process our optional data
         $opts['singular_name'] ??= $taxonomyName;
         $opts['name'] ??= $taxonomyName;
@@ -55,13 +55,13 @@ class Taxonomy implements TaxonomyInterface {
         
         //Init our default values by merging the array with the one passed
         //Any duplicate values will be overwritten
-        self::$opts = array_merge(self::$opts, $opts);
+        $this->opts = array_merge($this->opts, $opts);
         
         //Initialize our custom taxonomy name
-        self::$taxonomyName = $taxonomyName;
+        $this->taxonomyName = $taxonomyName;
         
         //Initialize our post type name
-        self::$postType = $postType;
+        $this->postType = $postType;
     }
     
     /**********************************************************************************
@@ -71,50 +71,50 @@ class Taxonomy implements TaxonomyInterface {
         //Register our custom taxonomy
         add_action('init', function(){
             //Register custom taxonomy
-            register_taxonomy(self::$taxonomyName,  self::$postType, self::$opts);
+            register_taxonomy($this->taxonomyName,  $this->postType, $this->opts);
         });
     }
     
     /**********************************************************************************
      * Getters and setters for our custom taxonomy properties
      * ********************************************************************************/
-    public function setTaxonomyName(string $taxonomyName = ''){ self::$taxonomyName = $taxonomyName; }
-    public function getTaxonomyName(): string { return self::$taxonomyName; }
+    public function setTaxonomyName(string $taxonomyName = ''){ $this->taxonomyName = $taxonomyName; }
+    public function getTaxonomyName(): string { return $this->taxonomyName; }
     public function setSingularName(string $singular_name = ''){
-        self::$opts['singular_name'] = $singular_name;
-        self::$opts['labels']['singular_name'] = $singular_name;
+        $this->opts['singular_name'] = $singular_name;
+        $this->opts['labels']['singular_name'] = $singular_name;
     }
-    public function getSingularName(): string{ return self::$opts['$singular_name']; }
+    public function getSingularName(): string{ return $this->opts['$singular_name']; }
     public function setPluralName(string $plural_name = ''){
-        self::$opts['name'] = $plural_name;
-        self::$opts['labels']['name'] = $plural_name;
+        $this->opts['name'] = $plural_name;
+        $this->opts['labels']['name'] = $plural_name;
     }
-    public function getPluralName(): string{ return self::$opts['plural_name']; }
-    public function getMenuName(): string{ return self::$opts['$singular_name']; }
+    public function getPluralName(): string{ return $this->opts['plural_name']; }
+    public function getMenuName(): string{ return $this->opts['$singular_name']; }
     public function setMenuName(string $menu_name = ''){
-        self::$opts['labels']['menu_name'] = $menu_name;
+        $this->opts['labels']['menu_name'] = $menu_name;
     }
-    public function setSlug(string $slug = ''){ self::$opts['slug'] = $slug; }
-    public function getSlug(): string{ return self::$opts['slug']; }
-    public function setDescription(string $description = ''){ self::$opts['description'] = $description; }
-    public function getDescription(): string{ return self::$opts['description']; }
+    public function setSlug(string $slug = ''){ $this->opts['slug'] = $slug; }
+    public function getSlug(): string{ return $this->opts['slug']; }
+    public function setDescription(string $description = ''){ $this->opts['description'] = $description; }
+    public function getDescription(): string{ return $this->opts['description']; }
     public function setLabels(string $lblSearchItems = '', string $lblPopularItems = '', string $lblAllItems = '', string $lblEditItem = '', string $lblUpdateItem = '', string $lblAddNewItem = '', string $lblNewItemName = '', string $lblMenuName = ''){
-        if (!empty($lblSearchItems)) self::$opts['labels']['search_items'] = $lblSearchItems;
-        if (!empty($lblPopularItems)) self::$opts['labels']['popular_items'] = $lblPopularItems;
-        if (!empty($lblAllItems)) self::$opts['labels']['all_items'] = $lblAllItems;
-        if (!empty($lblEditItem)) self::$opts['labels']['edit_item'] = $lblEditItem;
-        if (!empty($lblUpdateItem)) self::$opts['labels']['update_item'] = $lblUpdateItem;
-        if (!empty($lblAddNewItem)) self::$opts['labels']['view_items'] = $lblAddNewItem;
-        if (!empty($lblNewItemName)) self::$opts['labels']['search_items'] = $lblNewItemName;
-        if (!empty($lblMenuName)) self::$opts['labels']['not_found'] = $lblMenuName;
+        if (!empty($lblSearchItems)) $this->opts['labels']['search_items'] = $lblSearchItems;
+        if (!empty($lblPopularItems)) $this->opts['labels']['popular_items'] = $lblPopularItems;
+        if (!empty($lblAllItems)) $this->opts['labels']['all_items'] = $lblAllItems;
+        if (!empty($lblEditItem)) $this->opts['labels']['edit_item'] = $lblEditItem;
+        if (!empty($lblUpdateItem)) $this->opts['labels']['update_item'] = $lblUpdateItem;
+        if (!empty($lblAddNewItem)) $this->opts['labels']['view_items'] = $lblAddNewItem;
+        if (!empty($lblNewItemName)) $this->opts['labels']['search_items'] = $lblNewItemName;
+        if (!empty($lblMenuName)) $this->opts['labels']['not_found'] = $lblMenuName;
     }
-    public function getLabels(): array{ return self::$opts['labels']; }
-    public function setHierarchical(bool $isHierarchical = true){ self::$opts['hierarchical'] = $isHierarchical; }
-    public function getHierarchical(): bool{ return self::$opts['hierarchical']; }
-    public function setPublic(bool $isPublic = true){ self::$opts['public'] = $isPublic; }
-    public function getPublic(): bool{ return self::$opts['public']; }
-    public function setShowInMenu(bool $isShowInMenu = true){ self::$opts['show_in_menu'] = $isShowInMenu; }
-    public function getShowInMenu(): bool{ return self::$opts['show_in_menu']; }
-    public function setTaxonomies(array $taxonomies = array()){ self::$opts['taxonomies'] = $taxonomies; }
-    public function getTaxonomies(): array { return self::$opts['taxonomies']; }
+    public function getLabels(): array{ return $this->opts['labels']; }
+    public function setHierarchical(bool $isHierarchical = true){ $this->opts['hierarchical'] = $isHierarchical; }
+    public function getHierarchical(): bool{ return $this->opts['hierarchical']; }
+    public function setPublic(bool $isPublic = true){ $this->opts['public'] = $isPublic; }
+    public function getPublic(): bool{ return $this->opts['public']; }
+    public function setShowInMenu(bool $isShowInMenu = true){ $this->opts['show_in_menu'] = $isShowInMenu; }
+    public function getShowInMenu(): bool{ return $this->opts['show_in_menu']; }
+    public function setTaxonomies(array $taxonomies = array()){ $this->opts['taxonomies'] = $taxonomies; }
+    public function getTaxonomies(): array { return $this->opts['taxonomies']; }
 }

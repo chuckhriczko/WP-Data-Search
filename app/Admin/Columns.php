@@ -5,31 +5,31 @@ namespace WPDataSearch\Admin;
 //Instantiate our class
 class Columns {
     //Instantiate our class variables
-    private static string $postTypeName = ''; //Post type for the columns we are modifying
-    private static int $contentLength = 100; //The maximum length of content to be displayed
+    private string $postTypeName = ''; //Post type for the columns we are modifying
+    private int $contentLength = 100; //The maximum length of content to be displayed
     
     /**********************************************************************************
      * Constructor, calls the init function
      * ********************************************************************************/
     public function __construct(string $postTypeName = ''){
         //Call our initialization function if it is not called immediately (PHP5 style)
-        self::init($postTypeName);
+        $this->init($postTypeName);
     }
     
     /**********************************************************************************
      * Initializes our custom post type
      * ********************************************************************************/
-    public static function init(string $postTypeName = ''){
+    public function init(string $postTypeName = ''){
         //Set our post type
-        self::$postTypeName = $postTypeName;
+        $this->postTypeName = $postTypeName;
     }
     
     /**********************************************************************************
      * Adds a column
      * ********************************************************************************/
-    public static function addColumn(string $assocIndex = '', string $assocLabel = '', int $pos = null) {
+    public function addColumn(string $assocIndex = '', string $assocLabel = '', int $pos = null) {
         //Add the filter for adding and removing columns
-        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel, $pos){
+        add_filter('manage_'.$this->postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel, $pos){
             if (!empty($assocIndex) && !isset($columns[$assocIndex])){
                 //Instantiate our temporary columns array
                 $newCols = [];
@@ -73,8 +73,8 @@ class Columns {
     /**********************************************************************************
      * Adds action to add post content to columns
      * ********************************************************************************/
-    public static function addColumnPostContent(string $assocIndex = '') {
-        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex) {
+    public function addColumnPostContent(string $assocIndex = '') {
+        add_action('manage_'.$this->postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex) {
             if ($columnKey==$assocIndex){
                 //Get the current post object
                 $post = get_post($postId);
@@ -83,7 +83,7 @@ class Columns {
                 $content = $post->post_content;
                 
                 //Cut the content
-                substr($content, 0, self::$contentLength);
+                substr($content, 0, $this->contentLength);
                 
                 //Display the content
                 echo apply_filters('the_content', $content);
@@ -94,8 +94,8 @@ class Columns {
     /**********************************************************************************
      * Adds action to add post meta data to columns
      * ********************************************************************************/
-    public static function addColumnPostMeta(string $assocIndex = '', string $metaKey = '') {
-        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $metaKey) {
+    public function addColumnPostMeta(string $assocIndex = '', string $metaKey = '') {
+        add_action('manage_'.$this->postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $metaKey) {
             if ($columnKey==$assocIndex){
                 //Get the metadata from the post based on the meta_key field
                 $meta = get_post_meta($postId, $metaKey, true);
@@ -109,8 +109,8 @@ class Columns {
     /**********************************************************************************
      * Adds action to add option meta data to columns
      * ********************************************************************************/
-    public static function addColumnOptionData(string $assocIndex = '', string $optionKey = '', string $defaultData = '') {
-        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $optionKey, $defaultData) {
+    public function addColumnOptionData(string $assocIndex = '', string $optionKey = '', string $defaultData = '') {
+        add_action('manage_'.$this->postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $optionKey, $defaultData) {
             if ($columnKey==$assocIndex){
                 //Get the metadata from the post based on the meta_key field
                 $option = get_option($optionKey, $defaultData);
@@ -124,8 +124,8 @@ class Columns {
     /**********************************************************************************
      * Adds action to add custom content to columns
      * ********************************************************************************/
-    public static function addColumnCustomContent(string $assocIndex = '', string $content = '') {
-        add_action('manage_'.self::$postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $content) {
+    public function addColumnCustomContent(string $assocIndex = '', string $content = '') {
+        add_action('manage_'.$this->postTypeName.'_posts_custom_column', function($columnKey, $postId) use ($assocIndex, $content) {
             echo $columnKey==$assocIndex ? $content : '';
         }, 10, 2);
     }
@@ -133,9 +133,9 @@ class Columns {
     /**********************************************************************************
      * Removes a column
      * ********************************************************************************/
-    public static function removeColumn(string $assocIndex = '') {
+    public function removeColumn(string $assocIndex = '') {
         //Add the filter for adding and removing columns
-        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex){
+        add_filter('manage_'.$this->postTypeName.'_posts_columns', function($columns) use ($assocIndex){
             //Remove the column if it exists
             if (!empty($assocIndex) && isset($columns[$assocIndex])) unset($columns[$assocIndex]);
             
@@ -147,9 +147,9 @@ class Columns {
     /**********************************************************************************
      * Updates a column
      * ********************************************************************************/
-    public static function updateColumn(string $assocIndex = '', string $assocLabel = '') {
+    public function updateColumn(string $assocIndex = '', string $assocLabel = '') {
         //Add the filter for adding and removing columns
-        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel){
+        add_filter('manage_'.$this->postTypeName.'_posts_columns', function($columns) use ($assocIndex, $assocLabel){
             //If the column exists, update the column label
             $columns[$assocIndex] = (!empty($assocIndex) && isset($columns[$assocIndex])) ? $assocLabel : $columns[$assocIndex];
             
@@ -161,9 +161,9 @@ class Columns {
     /**********************************************************************************
      * Reorders a column
      * ********************************************************************************/
-    public static function reorderColumn(string $assocIndex = '', int $pos = null) {
+    public function reorderColumn(string $assocIndex = '', int $pos = null) {
         //Add the filter for adding and removing columns
-        add_filter('manage_'.self::$postTypeName.'_posts_columns', function($columns) use ($assocIndex, $pos){
+        add_filter('manage_'.$this->postTypeName.'_posts_columns', function($columns) use ($assocIndex, $pos){
             if (!empty($assocIndex)){
                 //Instantiate our temporary columns array
                 $newCols = [];
